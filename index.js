@@ -25,6 +25,21 @@ async function run() {
 
     const db = client.db("smart_db").collection("products");
 
+    app.get('/products', async(req,res) => {
+      const result = await db.find().toArray();
+      res.send(result)
+    })
+    
+    app.get("/products/:id", async(req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await db.findOne(query);
+      res.send(result)
+    })
+
+
+
+
     app.post("/products", async (req, res) => {
       const data = req.body;
       const result = await db.insertOne(data);
