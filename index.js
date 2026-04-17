@@ -89,11 +89,28 @@ async function run() {
       res.send(result);
     });
 
+
+
+    app.get("/bids/:id", async(req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await bidsCollection.findOne(query);
+      res.send(result)
+    })
+
     app.post('/bids', async(req, res) => {
       const newBidsData = req.body;
       const result = await bidsCollection.insertOne(newBidsData);
       res.send(result)
 })
+
+    app.delete("/bids/:id", async(req, res) => {
+      const id = req.params.id;
+      console.log("Deleting ID:", id);
+      const query = { _id: new ObjectId(id) };
+      const result = await bidsCollection.deleteOne(query);
+      res.send(result);
+    })
 
 
     await client.db("admin").command({ ping: 1 });
