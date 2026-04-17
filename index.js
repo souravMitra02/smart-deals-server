@@ -25,8 +25,17 @@ async function run() {
 
     const db = client.db("smart_db").collection("products");
 
-    app.get('/products', async(req,res) => {
-      const result = await db.find().toArray();
+    app.get('/products', async (req, res) => {
+      // const projectFields = {_id : 0 ,email: 1 };
+      console.log(req.query);
+      const email = req.query.email;
+      const query = {};
+      if (email) {
+        query.email = email;
+      }
+      const cursor = db.find(query)
+        // .project(projectFields).sort({ price_min: 1 }).limit(4);
+      const result = await cursor.toArray();
       res.send(result)
     })
     
